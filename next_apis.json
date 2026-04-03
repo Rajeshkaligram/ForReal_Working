@@ -1,0 +1,142 @@
+[
+  {
+    "folder": "User",
+    "apis": [
+      {
+        "name": "Get Profile",
+        "method": "GET"
+      },
+      {
+        "name": "Profile Update - Deprecate",
+        "method": "POST"
+      },
+      {
+        "name": "Profile Update",
+        "method": "POST"
+      },
+      {
+        "name": "Body Details Update",
+        "method": "POST"
+      },
+      {
+        "name": "Update PayPal Account",
+        "method": "POST"
+      },
+      {
+        "name": "Verification Code",
+        "method": "POST"
+      },
+      {
+        "name": "Resend Verification Code",
+        "method": "POST"
+      },
+      {
+        "name": "Update Firebase ID",
+        "method": "POST"
+      },
+      {
+        "name": "Change Password",
+        "method": "POST"
+      },
+      {
+        "name": "Get PayPal Connect Url",
+        "method": "POST"
+      },
+      {
+        "name": "Get PayPal Connect Status",
+        "method": "POST"
+      }
+    ]
+  },
+  {
+    "folder": "Rented Products",
+    "apis": [
+      {
+        "name": "Get List",
+        "method": "GET"
+      },
+      {
+        "name": "Product Detail",
+        "method": "GET"
+      },
+      {
+        "name": "Change Status",
+        "method": "POST"
+      },
+      {
+        "name": "Transactions",
+        "method": "GET"
+      },
+      {
+        "name": "Transaction Detail",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "folder": "Product Reviews",
+    "apis": [
+      {
+        "name": "Submit a review",
+        "method": "POST"
+      },
+      {
+        "name": "Get List",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "folder": "Notifications",
+    "apis": [
+      {
+        "name": "Get List",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "folder": "Messages",
+    "apis": [
+      {
+        "name": "Get List",
+        "method": "GET"
+      },
+      {
+        "name": "Get message detail",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "folder": "Cleaners",
+    "apis": [
+      {
+        "name": "Get List",
+        "method": "GET"
+      },
+      {
+        "name": "Get Cleaners Nearby",
+        "method": "GET"
+      }
+    ]
+  },
+  {
+    "folder": "Contact Us",
+    "apis": [
+      {
+        "name": "Submit",
+        "method": "POST"
+      }
+    ]
+  },
+  {
+    "folder": "FAQs",
+    "apis": [
+      {
+        "name": "Get List",
+        "method": "GET"
+      }
+    ]
+  }
+]
