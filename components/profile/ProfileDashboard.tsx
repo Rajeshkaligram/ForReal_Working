@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { useSearchParams, useRouter } from "next/navigation";
 import OverviewTab from "./OverviewTab";
 import RentingTab from "./RentingTab";
 import PostingsTab from "./PostingsTab";
@@ -9,8 +10,30 @@ import ReviewsTab from "./ReviewsTab";
 import SettingsTab from "./SettingsTab";
 
 export default function ProfileDashboard() {
-  const [tab, setTab] = useState("overview");
-  const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const initialTab = searchParams.get("tab") || "overview";
+  const [tab, setTab] = useState(initialTab);
+
+  useEffect(() => {
+    const queryTab = searchParams.get("tab");
+    if (queryTab && queryTab !== tab) {
+      setTab(queryTab);
+    }
+  }, [searchParams]);
+
+  const handleTabChange = (newTab: string) => {
+    setTab(newTab);
+    router.replace(`/profile?tab=${newTab}`);
+  };
+
+  const { user, refreshProfile } = useAuth();
+
+  // Refresh profile data on mount to get latest stats
+  useEffect(() => {
+    refreshProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const tabs = [
     { id: "overview", label: "Overview" },
@@ -64,7 +87,7 @@ export default function ProfileDashboard() {
           {tabs.map((item) => (
             <button
               key={item.id}
-              onClick={() => setTab(item.id)}
+              onClick={() => handleTabChange(item.id)}
               className={`relative py-3 md:py-4 transition-all duration-300 cursor-pointer whitespace-nowrap ${
                 tab === item.id
                   ? "text-black font-medium"
@@ -82,7 +105,7 @@ export default function ProfileDashboard() {
 
       {/* CONTENT */}
       <div className="container-md mx-auto py-10">
-        {tab === "overview" && <OverviewTab setTab={setTab} />}
+        {tab === "overview" && <OverviewTab setTab={handleTabChange} />}
         {tab === "renting" && <RentingTab />}
         {tab === "postings" && <PostingsTab />}
         {tab === "reviews" && <ReviewsTab />}

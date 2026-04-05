@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 import AuthenticationPanel from "@/components/listing/AuthenticationPanel";
 import CalendarSection from "@/components/listing/CalendarSection";
@@ -11,17 +14,31 @@ import OptionsSection from "@/components/listing/OptionsSection";
 import PriceTags from "@/components/listing/PriceTags";
 import SubmitBar from "@/components/listing/SubmitBar";
 import UploadSection from "@/components/listing/UploadSection";
+import { ListingProvider, useListingContext } from "@/components/listing/ListingContext";
 
 export default function ListPage() {
-  const isAuthenticated = false;
+  const { user, isLoading } = useAuth();
+  const router = useRouter();
 
-  const [authEnabled, setAuthEnabled] = useState(false);
-  const [cleaningEnabled, setCleaningEnabled] = useState(false);
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/auth/login");
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading || !user) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin text-black" size={32} />
+      </div>
+    );
+  }
 
   return (
-    <section className=" pt-8 md:pt-16 pb-8 md:pb-32">
-      <div className="container space-y-10">
-        <ListHeader />
+    <ListingProvider>
+      <section className=" pt-8 md:pt-16 pb-8 md:pb-32">
+        <div className="container space-y-10">
+          <ListHeader />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {/* LEFT */}
@@ -35,21 +52,26 @@ export default function ListPage() {
           <div className="space-y-5 md:space-y-10">
             <DetailsForm />
 
-            <OptionsSection
-              authEnabled={authEnabled}
-              setAuthEnabled={setAuthEnabled}
-              cleaningEnabled={cleaningEnabled}
-              setCleaningEnabled={setCleaningEnabled}
-            />
+            <OptionsSection />
           </div>
         </div>
 
         {/*  SHOW HERE (MAIN PAGE) */}
-        {authEnabled && <AuthenticationPanel />}
-        {cleaningEnabled && <CleaningPanel />}
+        <ConditionalPanels />
 
         <SubmitBar/>
       </div>
     </section>
+    </ListingProvider>
+  );
+}
+
+function ConditionalPanels() {
+  const { authEnabled, cleaningEnabled } = useListingContext();
+  return (
+    <>
+      {authEnabled && <AuthenticationPanel />}
+      {cleaningEnabled && <CleaningPanel />}
+    </>
   );
 }

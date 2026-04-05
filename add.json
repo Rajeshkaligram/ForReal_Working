@@ -1,0 +1,642 @@
+{
+  "name": "Add",
+  "id": "3d88c21f-dd76-4dbf-b439-028a593f6d0e",
+  "protocolProfileBehavior": {
+    "disableBodyPruning": true
+  },
+  "request": {
+    "method": "POST",
+    "header": [
+      {
+        "key": "Accept",
+        "type": "text",
+        "value": "application/json"
+      },
+      {
+        "description": "<p>The value field must contain a valid token; e.g. \"Bearer [token]\"</p>\n",
+        "key": "Authorization",
+        "type": "text",
+        "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjQzODIyZmM4Y2M4ODUzZGVmZmFmY2Y1N2I5NjljYTE1YTA2N2VlNjhmOTM5NWNmMDQ2MjU0NDhhY2YzOTVmMzFlZGRlY2E3ZmJkNWM0NWJkIn0.eyJhdWQiOiI1IiwianRpIjoiNDM4MjJmYzhjYzg4NTNkZWZmYWZjZjU3Yjk2OWNhMTVhMDY3ZWU2OGY5Mzk1Y2YwNDYyNTQ0OGFjZjM5NWYzMWVkZGVjYTdmYmQ1YzQ1YmQiLCJpYXQiOjE1OTQwMjgyNjYsIm5iZiI6MTU5NDAyODI2NiwiZXhwIjoxNjI1NTY0MjY2LCJzdWIiOiI0OTgiLCJzY29wZXMiOltdfQ.v5d-mlPlRZj6ubszzWTLRtlLSs2MkcOX_V41jT7hd7nLrVL-NWXQT9krnQYJL_Oe8dbyO7CY2wdlRQ3fpEbMRf0pAA4LnhLULwX_dhIQsaKp5rXH-qmK3HWye9d5WXnf0sbSpLeGdo8dimWIMB5-P0GRXanuNijB9Rn04b1AfKqxox66KTdn82KDrn2fNP9RzDPJmmIz3cZy8QhdHq8B01wrnHnaT6RQNcgVFPrg5aEjJyFZFb2H1Fn4Li7Zc8pU2Y5mFg6ZzLgQzAZXh-W7I48TMKoueAeUnR0CNE4P75brKQfnZ-21e4emzQd1SF7tAlB1Nyx4_VC-F4XsWACao_Ziy0_8_ULJ36St30jVUpMzZCOPMO1jfTBXJdhq7rYRf01nVu3eW-qUJ-bfhzTkNCG0UPL4HxxC0mH6RZPFLVQ3R2qOn1NvM9FsgCrNnleFaXzc1-jj2Zsbtpx05RTh2Wi0Wg6kVsGRBlG4Pjg6Bz-3J7VKH8FnXt2QKg8pz7kou0CjUZRKYzKTfrzmr8omDwqtuX5t9xfloYArw5islGCXCHKLhhRs4rImH0ezOg889dPu6LxL7DbgV5Gf6ougXfq4Lv7fS0wBgiAz8Muig_qQy7TQbKn5NdCIdVnDcqd5EoCOHFtDSgeElamkonWwVzl8ISTs0I86hJ_vAWqL9eE"
+      }
+    ],
+    "body": {
+      "mode": "formdata",
+      "formdata": [
+        {
+          "key": "name",
+          "value": "Test Product Name",
+          "description": "<p>Product name (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "picture",
+          "value": "data:image/jpeg;base64,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",
+          "description": "<p>Product Image base64 data (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "designer",
+          "value": "SS",
+          "description": "<p>Designer name (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "price",
+          "value": "40",
+          "description": "<p>Price of the product e.g. 10, 15, 20 (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "retail_price",
+          "value": "80",
+          "description": "<p>Retail price of the product e.g. 10, 15, 20 (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "color",
+          "value": "Green",
+          "description": "<p>Color of the product; e,g, White, Green, Brown etc. (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "size",
+          "value": "Small",
+          "description": "<p>e.g. Extra Small, Small, Medium, Large, Extra Large (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "season",
+          "value": "Winter",
+          "description": "<p>e.g. Summer, Winter, Spring, Fall (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "description",
+          "value": "this is description of the product",
+          "description": "<p>Description of the product (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "cancellation",
+          "value": "Aggressive (Item may be cancelled without penalty 9 days and up prior the rental period)",
+          "description": "<p>e.g. Aggressive (Item may be cancelled without penalty 9 days and up prior the rental period),\nModerate (Item may be cancelled without penalty 6-8 days prior the rental period); (requried)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "alteration",
+          "value": "Yes",
+          "description": "<p>e.g. Yes, No (requried)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "cleaning_price",
+          "value": "20",
+          "description": "<p>Product cleaning price (optional)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "condition",
+          "value": "Like New",
+          "description": "<p>e.g. Like New, Slightly Worn, Still Looks Good (required)</p>\n",
+          "type": "text"
+        },
+        {
+          "key": "category_id",
+          "value": "1",
+          "description": "<p>Product category i.e. 1-11 (required)</p>\n",
+          "type": "text"
+        }
+      ]
+    },
+    "url": "{{baseUrl}}/product/add",
+    "description": "<p>This endpoint will add a new product.</p>\n",
+    "urlObject": {
+      "path": [
+        "product",
+        "add"
+      ],
+      "host": [
+        "{{baseUrl}}"
+      ],
+      "query": [],
+      "variable": []
+    }
+  },
+  "response": [
+    {
+      "id": "3c8a318f-77e2-4459-9922-7b5d6ae5236f",
+      "name": "422 Unprocessable Entity (Could not add)",
+      "originalRequest": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "type": "text",
+            "value": "application/json"
+          },
+          {
+            "description": "The value field must contain a valid token; e.g. \"Bearer [token]\"",
+            "key": "Authorization",
+            "type": "text",
+            "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjQ4NmU2NTU3YjNjMTkwMGZiM2I5YmVlY2ZhOWNjMTNjYTQ4NjAxZDFmNWViY2I2NGJkN2Y2ZDczOGZhZWI1NWY3MTMzYmE5YWRkZjA1NTlhIn0.eyJhdWQiOiI1IiwianRpIjoiNDg2ZTY1NTdiM2MxOTAwZmIzYjliZWVjZmE5Y2MxM2NhNDg2MDFkMWY1ZWJjYjY0YmQ3ZjZkNzM4ZmFlYjU1ZjcxMzNiYTlhZGRmMDU1OWEiLCJpYXQiOjE1ODY5NjU0ODEsIm5iZiI6MTU4Njk2NTQ4MSwiZXhwIjoxNjE4NTAxNDgxLCJzdWIiOiI0NzUiLCJzY29wZXMiOltdfQ.L2l_3pO4amnmOyWTX8bXRlnJX4cR7QjiYypLFuJ8e-WN0UqLXJ6XwedeR0DJq4uKvvBqjSqSQq_LCAmcG7ziTi5SebM4riTecLw7mUqe4tED5BBzXdZCCzC5e7ygiicJlUxRewpdSWWo4db2Eb1HHlFs6zBnutYlBknGjNH0IyAMBuxQY2EisDVgUZ61jJlFnH0FKwyBQQqnyY9JsHCqE5bsgeORNa4Uz6sMex3J7XPQUiYm-jsWzBD_PPHi6BnSUW8G07AltKXLfZBaQ4Oi8OVMuz_RKFVb2fXDdIWQsXdDCmBww09x8XRw3RaLBssguswXpJaYx5p6K7Qs9O0wSF_QZkebTMTFPv5mplaRb33h4l2TYUQsQQrY-1JrfgH9tbLHVhWG_dPS1AsTXMVygSrDuFQtt4pQIwq9M930YjbFBVwmqF_q2LRCH6kPvdtMTRvMnfI_U7GZ5KzQjDjiaLrZiHL2RaWPGBhN1-meB4iBHgT1q2tKaDcaiCyKAzNmI9aavTxCuiBRS6uoWbSaKI7LT2a2_-2txyzYcvXgo1FZFx3FmwRI-ttZYBTa9dUzYq8ABpSxj1c9sJBLjBJoOa2JJugB6PnNXvhQtWk1NgY6nThhMP_8Scwoa0PYKaqg_5a_c_3c61z3UwZBRlbSL53-Oyi_o4-5ei4yKYWHOY8"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "name",
+              "value": "Test Product Name",
+              "description": "Product name (required)",
+              "type": "text"
+            },
+            {
+              "key": "picture",
+              "value": "data:image/jpeg;base64,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",
+              "description": "Product Image base64 data (required)",
+              "type": "text"
+            },
+            {
+              "key": "designer",
+              "value": "SS",
+              "description": "Designer name (required)",
+              "type": "text"
+            },
+            {
+              "key": "price",
+              "value": "40",
+              "description": "Price of the product e.g. 10, 15, 20 (required)",
+              "type": "text"
+            },
+            {
+              "key": "retail_price",
+              "value": "80",
+              "description": "Retail price of the product e.g. 10, 15, 20 (required)",
+              "type": "text"
+            },
+            {
+              "key": "color",
+              "value": "Green",
+              "description": "Color of the product; e,g, White, Green, Brown etc. (required)",
+              "type": "text"
+            },
+            {
+              "key": "size",
+              "value": "Small",
+              "description": "e.g. Extra Small, Small, Medium, Large, Extra Large (required)",
+              "type": "text"
+            },
+            {
+              "key": "season",
+              "value": "Winter",
+              "description": "e.g. Summer, Winter, Spring, Fall (required)",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "this is description of the product",
+              "description": "Description of the product (required)",
+              "type": "text"
+            },
+            {
+              "key": "cancellation",
+              "value": "Aggressive (Item may be cancelled without penalty 9 days and up prior the rental period)",
+              "description": "e.g. Aggressive (Item may be cancelled without penalty 9 days and up prior the rental period),\nModerate (Item may be cancelled without penalty 6-8 days prior the rental period); (requried)",
+              "type": "text"
+            },
+            {
+              "key": "alteration",
+              "value": "Yes",
+              "description": "e.g. Yes, No (requried)",
+              "type": "text"
+            },
+            {
+              "key": "cleaning_price",
+              "value": "20",
+              "description": "Product cleaning price (optional)",
+              "type": "text"
+            },
+            {
+              "key": "condition",
+              "value": "Like New",
+              "description": "e.g. Like New, Slightly Worn, Still Looks Good (required)",
+              "type": "text"
+            },
+            {
+              "key": "category_id",
+              "value": "1",
+              "description": "Product category i.e. 1-11 (required)",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "{{baseUrl}}/product"
+      },
+      "status": "Unprocessable Entity",
+      "code": 422,
+      "_postman_previewlanguage": "json",
+      "header": [
+        {
+          "key": "Date",
+          "value": "Wed, 15 Apr 2020 17:17:17 GMT"
+        },
+        {
+          "key": "Server",
+          "value": "Apache"
+        },
+        {
+          "key": "X-Powered-By",
+          "value": "PHP/7.2.10"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, private"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "max-age=5"
+        },
+        {
+          "key": "X-RateLimit-Limit",
+          "value": "60"
+        },
+        {
+          "key": "X-RateLimit-Remaining",
+          "value": "59"
+        },
+        {
+          "key": "Set-Cookie",
+          "value": "laravel_session=MLarIL90g2uqO1Ys0lFEcgjYcU3gGlDnynB0iIaE; expires=Wed, 15-Apr-2020 19:17:18 GMT; Max-Age=7200; path=/; httponly"
+        },
+        {
+          "key": "Vary",
+          "value": "Authorization"
+        },
+        {
+          "key": "Expires",
+          "value": "Wed, 15 Apr 2020 17:17:22 GMT"
+        },
+        {
+          "key": "Keep-Alive",
+          "value": "timeout=5, max=100"
+        },
+        {
+          "key": "Connection",
+          "value": "Keep-Alive"
+        },
+        {
+          "key": "Transfer-Encoding",
+          "value": "chunked"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "cookie": [],
+      "responseTime": null,
+      "body": "{\n    \"status\": 422,\n    \"message\": \"Product could not be added.\",\n    \"data\": []\n}"
+    },
+    {
+      "id": "56ad14ca-0a61-4d92-b5c0-73fe01ae8fc7",
+      "name": "201 Created",
+      "originalRequest": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "type": "text",
+            "value": "application/json"
+          },
+          {
+            "description": "The value field must contain a valid token; e.g. \"Bearer [token]\"",
+            "key": "Authorization",
+            "type": "text",
+            "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjBmMzUxMmIwYTg4NjY0NmI2NmE1Yzg1MDIzYmU3NzRjZjJjODMwNzQzYjAyY2IzMTY5MzU4YTM4MDg3OGRkN2FlOGVjZTdkYWFmMDI2NzFjIn0.eyJhdWQiOiIxIiwianRpIjoiMGYzNTEyYjBhODg2NjQ2YjY2YTVjODUwMjNiZTc3NGNmMmM4MzA3NDNiMDJjYjMxNjkzNThhMzgwODc4ZGQ3YWU4ZWNlN2RhYWYwMjY3MWMiLCJpYXQiOjE1ODY4NTAyNDMsIm5iZiI6MTU4Njg1MDI0MywiZXhwIjoxNjE4Mzg2MjQzLCJzdWIiOiI0NDkiLCJzY29wZXMiOltdfQ.Tcwd3gLlqyAdVjiIbw1srEvC6ijG_T3KX8MDI8QK9G-RHhySVRiOemIIFuZ_LShMlsCIfTdWhmdf7wBESAxT27USVp14Te1mmEONQ2Y13m16BYREmyMIl6OYbrwyBAIRbeqJacvsx75vYrLORe6oSGtRQyYNC_B9Aaet2OZl9RNniV5AWAs5M04iHUHFlx1HUJZJGCkguygBsT6lzA9ME19zdBzTifDzr2NQO_WBNHKvH75Ta6mfMjs5JoMwWhcDjJOVGkHoW98UT3CZIp7mYWcFPLlSL71tC5AH4S8WUIMse9UY1oYLpsKux3aJpQ9gFJEpf6p5Gx1kmXlUx9WWaAF-L1o9KadQOnI6-JBCqstNlrlnw-nCxLx09ggWWF1OVCdWnytGvToBpVAPz39TLTTrC4y5uqT4t_53YTg_yaw3cuJa0HJS8HifaI47lp25jwmACbFf8d23ztPg2BWxvkMLErD7CCRhoYlOUO_buJYHwB6tnbLYk1NsOZqn30l2h-p6WzvHT5V4nNa3hoEiHrkcj96p_-j7ApAec4E4nkFGqaE6a5YbhRm5CtS3HR7QtiPrV3s_r269EFRRoPlBTFXryd5-FG2T4TIRLIlIFqbsrA4lSWsA_4Qi3km_puzIBk0sMdSS7ucGiTGZjexuP9XFADb_pYaWUqAVZT9rfXQ"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "name",
+              "value": "Test Product Name",
+              "description": "Product name (required)",
+              "type": "text"
+            },
+            {
+              "key": "picture",
+              "value": "data:image/jpeg;base64,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",
+              "description": "Product Image base64 data (required)",
+              "type": "text"
+            },
+            {
+              "key": "designer",
+              "value": "SS",
+              "description": "Designer name (required)",
+              "type": "text"
+            },
+            {
+              "key": "price",
+              "value": "40",
+              "description": "Price of the product e.g. 10, 15, 20 (required)",
+              "type": "text"
+            },
+            {
+              "key": "retail_price",
+              "value": "80",
+              "description": "Retail price of the product e.g. 10, 15, 20 (required)",
+              "type": "text"
+            },
+            {
+              "key": "color",
+              "value": "Green",
+              "description": "Color of the product; e,g, White, Green, Brown etc. (required)",
+              "type": "text"
+            },
+            {
+              "key": "size",
+              "value": "Small",
+              "description": "e.g. Extra Small, Small, Medium, Large, Extra Large (required)",
+              "type": "text"
+            },
+            {
+              "key": "season",
+              "value": "Winter",
+              "description": "e.g. Summer, Winter, Spring, Fall (required)",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "this is description of the product",
+              "description": "Description of the product (required)",
+              "type": "text"
+            },
+            {
+              "key": "cancellation",
+              "value": "Aggressive (Item may be cancelled without penalty 9 days and up prior the rental period)",
+              "description": "e.g. Aggressive (Item may be cancelled without penalty 9 days and up prior the rental period),\nModerate (Item may be cancelled without penalty 6-8 days prior the rental period); (requried)",
+              "type": "text"
+            },
+            {
+              "key": "alteration",
+              "value": "Yes",
+              "description": "e.g. Yes, No (requried)",
+              "type": "text"
+            },
+            {
+              "key": "cleaning_price",
+              "value": "20",
+              "description": "Product cleaning price (optional)",
+              "type": "text"
+            },
+            {
+              "key": "condition",
+              "value": "Like New",
+              "description": "e.g. Like New, Slightly Worn, Still Looks Good (required)",
+              "type": "text"
+            },
+            {
+              "key": "category_id",
+              "value": "1",
+              "description": "Product category i.e. 1-11 (required)",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "{{baseUrl}}/product"
+      },
+      "status": "Created",
+      "code": 201,
+      "_postman_previewlanguage": "json",
+      "header": [
+        {
+          "key": "Date",
+          "value": "Tue, 14 Apr 2020 07:58:24 GMT"
+        },
+        {
+          "key": "Server",
+          "value": "Apache/2.4.29 (Ubuntu)"
+        },
+        {
+          "key": "Vary",
+          "value": "Authorization"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, private, max-age=5"
+        },
+        {
+          "key": "X-RateLimit-Limit",
+          "value": "60"
+        },
+        {
+          "key": "X-RateLimit-Remaining",
+          "value": "59"
+        },
+        {
+          "key": "Set-Cookie",
+          "value": "laravel_session=XOaeC30GFsEBcidDgEOYIJ3JlqUX2qcDJUM5MSRO; expires=Tue, 14-Apr-2020 09:58:24 GMT; Max-Age=7200; path=/; httponly"
+        },
+        {
+          "key": "Expires",
+          "value": "Tue, 14 Apr 2020 07:58:29 GMT"
+        },
+        {
+          "key": "Content-Length",
+          "value": "68"
+        },
+        {
+          "key": "Keep-Alive",
+          "value": "timeout=5, max=100"
+        },
+        {
+          "key": "Connection",
+          "value": "Keep-Alive"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "cookie": [],
+      "responseTime": null,
+      "body": "{\n    \"status\": 201,\n    \"message\": \"New product added successfully.\",\n    \"data\": []\n}"
+    },
+    {
+      "id": "64dff8d0-250f-47c7-903a-99fc1467352d",
+      "name": "422 Unprocessable Entity (Validation error)",
+      "originalRequest": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "type": "text",
+            "value": "application/json"
+          },
+          {
+            "description": "The value field must contain a valid token; e.g. \"Bearer [token]\"",
+            "key": "Authorization",
+            "type": "text",
+            "value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjQ4NmU2NTU3YjNjMTkwMGZiM2I5YmVlY2ZhOWNjMTNjYTQ4NjAxZDFmNWViY2I2NGJkN2Y2ZDczOGZhZWI1NWY3MTMzYmE5YWRkZjA1NTlhIn0.eyJhdWQiOiI1IiwianRpIjoiNDg2ZTY1NTdiM2MxOTAwZmIzYjliZWVjZmE5Y2MxM2NhNDg2MDFkMWY1ZWJjYjY0YmQ3ZjZkNzM4ZmFlYjU1ZjcxMzNiYTlhZGRmMDU1OWEiLCJpYXQiOjE1ODY5NjU0ODEsIm5iZiI6MTU4Njk2NTQ4MSwiZXhwIjoxNjE4NTAxNDgxLCJzdWIiOiI0NzUiLCJzY29wZXMiOltdfQ.L2l_3pO4amnmOyWTX8bXRlnJX4cR7QjiYypLFuJ8e-WN0UqLXJ6XwedeR0DJq4uKvvBqjSqSQq_LCAmcG7ziTi5SebM4riTecLw7mUqe4tED5BBzXdZCCzC5e7ygiicJlUxRewpdSWWo4db2Eb1HHlFs6zBnutYlBknGjNH0IyAMBuxQY2EisDVgUZ61jJlFnH0FKwyBQQqnyY9JsHCqE5bsgeORNa4Uz6sMex3J7XPQUiYm-jsWzBD_PPHi6BnSUW8G07AltKXLfZBaQ4Oi8OVMuz_RKFVb2fXDdIWQsXdDCmBww09x8XRw3RaLBssguswXpJaYx5p6K7Qs9O0wSF_QZkebTMTFPv5mplaRb33h4l2TYUQsQQrY-1JrfgH9tbLHVhWG_dPS1AsTXMVygSrDuFQtt4pQIwq9M930YjbFBVwmqF_q2LRCH6kPvdtMTRvMnfI_U7GZ5KzQjDjiaLrZiHL2RaWPGBhN1-meB4iBHgT1q2tKaDcaiCyKAzNmI9aavTxCuiBRS6uoWbSaKI7LT2a2_-2txyzYcvXgo1FZFx3FmwRI-ttZYBTa9dUzYq8ABpSxj1c9sJBLjBJoOa2JJugB6PnNXvhQtWk1NgY6nThhMP_8Scwoa0PYKaqg_5a_c_3c61z3UwZBRlbSL53-Oyi_o4-5ei4yKYWHOY8"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "name",
+              "value": "Te",
+              "description": "Product name (required)",
+              "type": "text"
+            },
+            {
+              "key": "picture",
+              "value": "data:image/jpeg;base64,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",
+              "description": "Product Image base64 data (required)",
+              "type": "text"
+            },
+            {
+              "key": "designer",
+              "value": "SS",
+              "description": "Designer name (required)",
+              "type": "text"
+            },
+            {
+              "key": "price",
+              "value": "40",
+              "description": "Price of the product e.g. 10, 15, 20 (required)",
+              "type": "text"
+            },
+            {
+              "key": "retail_price",
+              "value": "80",
+              "description": "Retail price of the product e.g. 10, 15, 20 (required)",
+              "type": "text"
+            },
+            {
+              "key": "color",
+              "value": "Green",
+              "description": "Color of the product; e,g, White, Green, Brown etc. (required)",
+              "type": "text"
+            },
+            {
+              "key": "size",
+              "value": "Small",
+              "description": "e.g. Extra Small, Small, Medium, Large, Extra Large (required)",
+              "type": "text"
+            },
+            {
+              "key": "season",
+              "value": "Winter",
+              "description": "e.g. Summer, Winter, Spring, Fall (required)",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "value": "this is description of the product",
+              "description": "Description of the product (required)",
+              "type": "text"
+            },
+            {
+              "key": "cancellation",
+              "value": "Aggressive (Item may be cancelled without penalty 9 days and up prior the rental period)",
+              "description": "e.g. Aggressive (Item may be cancelled without penalty 9 days and up prior the rental period),\nModerate (Item may be cancelled without penalty 6-8 days prior the rental period); (requried)",
+              "type": "text"
+            },
+            {
+              "key": "alteration",
+              "value": "Yes",
+              "description": "e.g. Yes, No (requried)",
+              "type": "text"
+            },
+            {
+              "key": "cleaning_price",
+              "value": "20",
+              "description": "Product cleaning price (optional)",
+              "type": "text"
+            },
+            {
+              "key": "condition",
+              "value": "Like New",
+              "description": "e.g. Like New, Slightly Worn, Still Looks Good (required)",
+              "type": "text"
+            },
+            {
+              "key": "category_id",
+              "value": "1",
+              "description": "Product category i.e. 1-11 (required)",
+              "type": "text"
+            }
+          ]
+        },
+        "url": "{{baseUrl}}/product"
+      },
+      "status": "Unprocessable Entity",
+      "code": 422,
+      "_postman_previewlanguage": "json",
+      "header": [
+        {
+          "key": "Date",
+          "value": "Wed, 15 Apr 2020 17:18:22 GMT"
+        },
+        {
+          "key": "Server",
+          "value": "Apache"
+        },
+        {
+          "key": "X-Powered-By",
+          "value": "PHP/7.2.10"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, private"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "max-age=5"
+        },
+        {
+          "key": "X-RateLimit-Limit",
+          "value": "60"
+        },
+        {
+          "key": "X-RateLimit-Remaining",
+          "value": "59"
+        },
+        {
+          "key": "Set-Cookie",
+          "value": "laravel_session=MLarIL90g2uqO1Ys0lFEcgjYcU3gGlDnynB0iIaE; expires=Wed, 15-Apr-2020 19:18:23 GMT; Max-Age=7200; path=/; httponly"
+        },
+        {
+          "key": "Vary",
+          "value": "Authorization"
+        },
+        {
+          "key": "Expires",
+          "value": "Wed, 15 Apr 2020 17:18:27 GMT"
+        },
+        {
+          "key": "Keep-Alive",
+          "value": "timeout=5, max=100"
+        },
+        {
+          "key": "Connection",
+          "value": "Keep-Alive"
+        },
+        {
+          "key": "Transfer-Encoding",
+          "value": "chunked"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "cookie": [],
+      "responseTime": null,
+      "body": "{\n    \"status\": 422,\n    \"message\": \"Validation Errors.\",\n    \"data\": {\n        \"name\": [\n            \"The name must be at least 3 characters.\"\n        ]\n    }\n}"
+    }
+  ],
+  "_postman_id": "3d88c21f-dd76-4dbf-b439-028a593f6d0e"
+}

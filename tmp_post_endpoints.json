@@ -1,0 +1,106 @@
+[
+  {
+    "name": "Register",
+    "url": "{{baseUrl}}/signup"
+  },
+  {
+    "name": "Login",
+    "url": "{{baseUrl}}/signin"
+  },
+  {
+    "name": "Forgot Password",
+    "url": "{{baseUrl}}/forgot-password"
+  },
+  {
+    "name": "Reset Password",
+    "url": "{{baseUrl}}/reset-password"
+  },
+  {
+    "name": "Logout",
+    "url": "{{baseUrl}}/logout"
+  },
+  {
+    "name": "Profile Update - Deprecate",
+    "url": "{{baseUrl}}/profile-update"
+  },
+  {
+    "name": "Profile Update",
+    "url": "{{baseUrl}}/update-profile/personal"
+  },
+  {
+    "name": "Body Details Update",
+    "url": "{{baseUrl}}/update-profile/body-details"
+  },
+  {
+    "name": "Update PayPal Account",
+    "url": "{{baseUrl}}/update-paypal-account"
+  },
+  {
+    "name": "Verification Code",
+    "url": "{{baseUrl}}/verify-code"
+  },
+  {
+    "name": "Resend Verification Code",
+    "url": "{{baseUrl}}/resend-verification-code"
+  },
+  {
+    "name": "Update Firebase ID",
+    "url": "{{baseUrl}}/update-firebase-id"
+  },
+  {
+    "name": "Change Password",
+    "url": "{{baseUrl}}/change-password"
+  },
+  {
+    "name": "Get PayPal Connect Url",
+    "url": "{{baseUrl}}/get-paypal-connect-url"
+  },
+  {
+    "name": "Get PayPal Connect Status",
+    "url": "{{baseUrl}}/get-paypal-connect-status"
+  },
+  {
+    "name": "Add",
+    "url": "{{baseUrl}}/product-add-wishlist"
+  },
+  {
+    "name": "Add",
+    "url": "{{baseUrl}}/product/add"
+  },
+  {
+    "name": "Update",
+    "url": "{{baseUrl}}/product/update"
+  },
+  {
+    "name": "Upload Photo",
+    "url": "{{baseUrl}}/product/photo/upload"
+  },
+  {
+    "name": "Add to Cart",
+    "url": "{{baseUrl}}/cart/add"
+  },
+  {
+    "name": "Place Order",
+    "url": "{{baseUrl}}/checkout/create-order"
+  },
+  {
+    "name": "Generate Payment URL",
+    "url": "{{baseUrl}}/checkout/generate-payment-url"
+  },
+  {
+    "name": "Payment Status",
+    "url": "{{baseUrl}}/checkout/payment-status"
+  },
+  {
+    "name": "Change Status",
+    "url": "{{baseUrl}}/change-rented-product-status"
+  },
+  {
+    "name": "Submit a review",
+    "url": "{{baseUrl}}/submit-product-review"
+  },
+  {
+    "name": "Submit",
+    "url": "{{baseUrl}}/contact-us"
+  }
+]

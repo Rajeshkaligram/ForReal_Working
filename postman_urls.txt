@@ -1,0 +1,57 @@
+Register -> {{baseUrl}}/signup
+Login -> {{baseUrl}}/signin
+Forgot Password -> {{baseUrl}}/forgot-password
+Reset Password -> {{baseUrl}}/reset-password
+Logout -> {{baseUrl}}/logout
+Get Profile -> {{baseUrl}}/profile
+Profile Update - Deprecate -> {{baseUrl}}/profile-update
+Profile Update -> {{baseUrl}}/update-profile/personal
+Body Details Update -> {{baseUrl}}/update-profile/body-details
+Update PayPal Account -> {{baseUrl}}/update-paypal-account
+Verification Code -> {{baseUrl}}/verify-code
+Resend Verification Code -> {{baseUrl}}/resend-verification-code
+Update Firebase ID -> {{baseUrl}}/update-firebase-id
+Change Password -> {{baseUrl}}/change-password
+Get PayPal Connect Url -> {{baseUrl}}/get-paypal-connect-url
+Get PayPal Connect Status -> {{baseUrl}}/get-paypal-connect-status
+Get Product Categories -> {{baseUrl}}/category-list
+Get Items -> {{baseUrl}}/wish-list?page=1&items_per_page=2
+Add -> {{baseUrl}}/product-add-wishlist
+Remove -> {{baseUrl}}/product-remove-wishlist?product_id=
+Get Detail -> {{baseUrl}}/product/492
+Add -> {{baseUrl}}/product/add
+Update -> {{baseUrl}}/product/update
+Remove -> {{baseUrl}}/product/remove?product_id=
+Get Products -> {{baseUrl}}/products/my-posted-items?page=1&items_per_page=4&sort=date-recently
+Upload Photo -> {{baseUrl}}/product/photo/upload
+Remove Photo -> {{baseUrl}}/product/photo/remove?id=381&product_id=492
+Get Bookings List -> {{baseUrl}}/booking-list?product_id=344
+Get List -> {{baseUrl}}/product-list?page=1&items_per_page=6
+Search -> {{baseUrl}}/product-search?search=a&page=&results_per_page=5
+Product Detail by ID -> {{baseUrl}}/product-detail?product_id=488
+New Products -> {{baseUrl}}/new-added-product?from_date=2020-03-01&page=1&results_per_page=1
+Get Filtered List -> {{baseUrl}}/product-list-filter?page=1&results_per_page=5&category_id=&body_type=&size=&price_min=&price_max=&per=&location=&designer=&height=&season=
+Product Detail by SEO Slug -> {{baseUrl}}/product-detail?slug=t-shirt
+Get List -> {{baseUrl}}/cart/list?body_type=1&size=&price=&per=&location=&height=&season=&category=
+Add to Cart -> {{baseUrl}}/cart/add
+Remove from Cart -> {{baseUrl}}/cart/remove?product_id=488
+Flush Cart -> {{baseUrl}}/cart/flush
+Place Order -> {{baseUrl}}/checkout/create-order
+Generate Payment URL -> {{baseUrl}}/checkout/generate-payment-url
+Payment Status -> {{baseUrl}}/checkout/payment-status
+Get List -> {{baseUrl}}/rented-list?sort&page=1&results_per_page=2
+Product Detail -> {{baseUrl}}/rented-detail?rented_id=203
+Change Status -> {{baseUrl}}/change-rented-product-status
+Transactions -> {{baseUrl}}/transactions
+Transaction Detail -> {{baseUrl}}/transaction-detail?transaction_id=
+Submit a review -> {{baseUrl}}/submit-product-review
+Get List -> {{baseUrl}}/reviews?product_id=369
+Get List -> {{baseUrl}}/notification-list?page=1&results_per_page=3&sort=date-beginning
+Calculator -> {{baseUrl}}/shipping-calculator?type=Localization&destination_address=Rue Lionel-Daunais&destination_city=Boucherville&destination_state_province_code=QC&destination_countries=Canada&destination_zipcode=J4B0H9&from_address=3256 Yonge Street&from_city=Toronto&from_state_province_code=ON&from_countries=Canada&from_zipcode=M4P2J6&length=12&width=12&height=12&weight=12
+Get List -> {{baseUrl}}/messages
+Get message detail -> {{baseUrl}}/room-messages?room_id=1
+Get List -> {{baseUrl}}/cleaners-list
+Get Cleaners Nearby -> {{baseUrl}}/cleaners-nearby
+Submit -> {{baseUrl}}/contact-us
+Get List -> {{baseUrl}}/faqs-list
+Dropdowns -> {{baseUrl}}/common-dropdowns

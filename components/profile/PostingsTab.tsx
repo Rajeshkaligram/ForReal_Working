@@ -16,11 +16,24 @@ export default function PostingsTab() {
     myProductsAPI
       .list()
       .then((res) => {
-        const data = res.data;
-        if (Array.isArray(data)) {
-          setProducts(data);
-        } else if (data && typeof data === "object" && "products" in data) {
-          setProducts((data as { products: Product[] }).products || []);
+        const payload = res.data as any;
+        
+        if (Array.isArray(payload)) {
+          setProducts(payload);
+        } else if (payload?.my_products && Array.isArray(payload.my_products)) {
+          setProducts(payload.my_products);
+        } else if (payload?.data && Array.isArray(payload.data)) {
+          setProducts(payload.data);
+        } else if (payload?.products) {
+          if (Array.isArray(payload.products)) {
+            setProducts(payload.products);
+          } else if (payload.products.data && Array.isArray(payload.products.data)) {
+            setProducts(payload.products.data);
+          } else {
+            setProducts([]);
+          }
+        } else {
+          setProducts([]);
         }
       })
       .catch(() => setProducts([]))

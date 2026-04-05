@@ -129,7 +129,7 @@ export const userAPI = {
     }),
 
   updateBodyDetails: (body: BodyDetailsPayload) =>
-    apiFetch<{ message: string }>("/update-profile/body-details", {
+    apiFetch<{ message: string }>("/profile-update", {
       method: "POST",
       body: buildFormData(body),
       auth: true,
@@ -143,7 +143,7 @@ export const userAPI = {
     }),
 
   updatePaypal: (paypal_email: string) =>
-    apiFetch<{ message: string }>("/update-paypal-account", {
+    apiFetch<{ message: string }>("/profile-update", {
       method: "POST",
       body: buildFormData({ paypal_email_address: paypal_email }),
       auth: true,
@@ -199,16 +199,21 @@ export const productsAPI = {
 
   // GET /product-search?search=<keyword>&results_per_page=20&page=1
   search: (params?: ProductSearchParams) => {
-    const cleaned: Record<string, string> = {};
+    const cleaned: Record<string, string> = {
+      page: "1",
+      results_per_page: "20",
+    };
     if (params) {
       for (const [k, v] of Object.entries(params)) {
         if (v !== undefined && v !== "") cleaned[k] = String(v);
       }
     }
-    // Backend REQUIRES these fields — always include them
-    if (!cleaned.search) cleaned.search = "a";
-    if (!cleaned.results_per_page) cleaned.results_per_page = "20";
-    if (!cleaned.page) cleaned.page = "1";
+    
+    // Backend REQUIRES search field - use a blank space to inclusively match all products unconditionally
+    if (!cleaned.search) {
+      cleaned.search = " ";
+    }
+
     const qs = "?" + new URLSearchParams(cleaned).toString();
     return apiFetch<ProductListResponse>(`/product-search${qs}`);
   },
@@ -236,13 +241,16 @@ export const productsAPI = {
 
   reviews: (product_id: number | string) =>
     apiFetch<ReviewsResponse>(`/reviews?product_id=${product_id}`),
+
+  categories: () =>
+    apiFetch<{ status: number; message: string; data: { categories: Array<{ id: number; name: string }> } }>("/category-list"),
 };
 
 // --- My Products (Vendor) ---
 export const myProductsAPI = {
   list: (page = 1, itemsPerPage = 20, sort = "date-recently") =>
     apiFetch<ProductListResponse>(
-      `/products/my-posted-items?page=${page}&results_per_page=${itemsPerPage}&sort=${sort}`,
+      `/my-added-products?page=${page}&results_per_page=${itemsPerPage}&sort=${sort}`,
       { auth: true }
     ),
 
@@ -250,7 +258,7 @@ export const myProductsAPI = {
     apiFetch<ProductDetailResponse>(`/product/${product_id}`, { auth: true }),
 
   add: (body: FormData) =>
-    apiFetch<{ message: string; data?: Product }>("/product/add", {
+    apiFetch<{ message: string; data?: Product }>("/product", {
       method: "POST",
       body,
       auth: true,
@@ -803,6 +811,7 @@ export interface RentedProductsResponse {
 
 export interface Message {
   id: number;
+  room_id?: string | number;
   sender_id: number;
   receiver_id: number;
   message: string;

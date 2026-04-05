@@ -1,16 +1,9 @@
 import ToggleItem from "./ToggleItem";
+import { useListingContext } from "./ListingContext";
 
-export default function OptionsSection({
-  authEnabled,
-  setAuthEnabled,
-  cleaningEnabled,
-  setCleaningEnabled,
-}: {
-  authEnabled: boolean;
-  setAuthEnabled: (v: boolean) => void;
-  cleaningEnabled: boolean;
-  setCleaningEnabled: (v: boolean) => void;
-}) {
+export default function OptionsSection() {
+  const { authEnabled, setAuthEnabled, cleaningEnabled, setCleaningEnabled } = useListingContext();
+
   return (
     <div className="space-y-4">
       <p className="text-[11px] tracking-[0.25em] uppercase text-muted">

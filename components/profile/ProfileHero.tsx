@@ -62,7 +62,10 @@ export default function ProfileHero() {
             )}
             <span className="flex items-center gap-1">
               <Calendar size={11} />
-              Member since 2025
+              Member since{" "}
+              {(user as any)?.created_at
+                ? new Date((user as any).created_at).getFullYear()
+                : new Date().getFullYear()}
             </span>
           </div>
         </div>

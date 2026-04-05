@@ -135,9 +135,12 @@ export default function ProductInfo({
           REQUEST TO RENT
         </button>
 
-        <button className="w-full cursor-pointer border border-border hover:bg-muted/10 hover:border-primary py-3 text-xs tracking-widest">
+        <Link 
+          href={`/message${product.added_by?.id ? `?user_id=${product.added_by.id}` : ''}`}
+          className="w-full text-center cursor-pointer border border-border hover:bg-muted/10 hover:border-primary py-3 text-xs tracking-widest block"
+        >
           MESSAGE SELLER
-        </button>
+        </Link>
 
         {cartMsg && (
           <p className={`text-xs text-center ${cartMsg.startsWith("✓") ? "text-green-600" : "text-red-500"} mt-2`}>

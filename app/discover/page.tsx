@@ -15,21 +15,28 @@ export default function DiscoverPage() {
   const [showFilters, setShowFilters] = useState(false);
   const { isLoggedIn } = useAuth();
 
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+
   const [filters, setFilters] = useState<ProductSearchParams>({
     search: "",
     category_id: "",
     min_price: "",
     max_price: "",
     size: "",
+    page: "1",
   });
   const [searchInput, setSearchInput] = useState("");
 
   const fetchProducts = useCallback(async (params: ProductSearchParams) => {
     setLoading(true);
     try {
-      const clean: Record<string, string> = {};
+      const clean: Record<string, string> = {
+        page: params.page || "1",
+      };
       for (const [k, v] of Object.entries(params)) {
-        if (v) clean[k] = v;
+        if (v && k !== "page") clean[k] = v;
       }
       const res = await productsAPI.search(clean);
       // API returns data.products (array) or data (array) depending on endpoint
@@ -40,15 +47,26 @@ export default function DiscoverPage() {
         ? ((d as { products: Product[] }).products)
         : [];
       setProducts(items);
+
+      if (!Array.isArray(d) && d?.total !== undefined) {
+          const total = Number(d.total) || 0;
+          setTotalItems(total);
+          setTotalPages(Math.ceil(total / 20));
+      } else {
+          setTotalItems(items.length);
+          setTotalPages(1);
+      }
     } catch {
       setProducts([]);
+      setTotalItems(0);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchProducts({});
+    fetchProducts({ page: "1" });
     categoriesAPI.list().then((r) => {
       const cats = Array.isArray(r?.data) ? r.data : (r?.data as { categories?: unknown[] })?.categories || [];
       setCategories(cats as Category[]);
@@ -57,22 +75,36 @@ export default function DiscoverPage() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const next = { ...filters, search: searchInput };
+    setPage(1);
+    const next = { ...filters, search: searchInput, page: "1" };
     setFilters(next);
     fetchProducts(next);
   };
 
   const applyFilters = () => {
-    fetchProducts(filters);
+    setPage(1);
+    const next = { ...filters, page: "1" };
+    setFilters(next);
+    fetchProducts(next);
     setShowFilters(false);
   };
 
   const clearFilters = () => {
-    const reset = { search: "", category_id: "", min_price: "", max_price: "", size: "" };
+    const reset = { search: "", category_id: "", min_price: "", max_price: "", size: "", page: "1" };
     setFilters(reset);
     setSearchInput("");
-    fetchProducts({});
+    setPage(1);
+    fetchProducts(reset);
     setShowFilters(false);
+  };
+
+  const goToPage = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setPage(newPage);
+    const next = { ...filters, page: newPage.toString() };
+    setFilters(next);
+    fetchProducts(next);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const toggleWishlist = async (productId: number, e: React.MouseEvent) => {
@@ -200,7 +232,7 @@ export default function DiscoverPage() {
         {/* Results count */}
         {!loading && (
           <p className="text-xs text-muted mb-6 tracking-widest uppercase">
-            {products.length} piece{products.length !== 1 ? "s" : ""} found
+            {totalItems} piece{totalItems !== 1 ? "s" : ""} found
           </p>
         )}
 
@@ -274,6 +306,29 @@ export default function DiscoverPage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Pagination */ }
+        {!loading && totalPages > 1 && (
+          <div className="flex items-center justify-center gap-4 mt-12 py-6 border-t border-border">
+            <button
+              disabled={page === 1}
+              onClick={() => goToPage(page - 1)}
+              className="px-6 py-2.5 text-xs font-semibold tracking-widest uppercase border border-border disabled:opacity-30 disabled:cursor-not-allowed hover:bg-black hover:border-black hover:text-white transition-all duration-300"
+            >
+              PREVIOUS
+            </button>
+            <span className="text-xs font-medium tracking-widest text-muted uppercase">
+              PAGE {page} OF {totalPages}
+            </span>
+            <button
+              disabled={page === totalPages}
+              onClick={() => goToPage(page + 1)}
+              className="px-6 py-2.5 text-xs font-semibold tracking-widest uppercase border border-border disabled:opacity-30 disabled:cursor-not-allowed hover:bg-black hover:border-black hover:text-white transition-all duration-300"
+            >
+              NEXT
+            </button>
           </div>
         )}
       </div>
