@@ -17,43 +17,71 @@ type FetchOptions = RequestInit & {
   auth?: boolean; // whether to attach Bearer token (default: false)
 };
 
+const requestCache = new Map<string, { promise: Promise<any>; time: number }>();
+
 export async function apiFetch<T = unknown>(
   endpoint: string,
   options: FetchOptions = {}
 ): Promise<T> {
   const { auth = false, ...fetchOptions } = options;
+  const isGet = !fetchOptions.method || fetchOptions.method.toUpperCase() === "GET";
+  
+  const cacheKey = auth ? `auth_${endpoint}` : endpoint;
 
-  const headers: Record<string, string> = {
-    Accept: "application/json",
-    ...(fetchOptions.headers as Record<string, string>),
+  if (isGet) {
+    const cached = requestCache.get(cacheKey);
+    // Return cached promise if within 60 seconds
+    if (cached && Date.now() - cached.time < 60000) {
+      return cached.promise.catch(() => {
+        requestCache.delete(cacheKey);
+        throw new Error("Cached request failed");
+      }) as Promise<T>;
+    }
+  }
+
+  const performRequest = async () => {
+    const headers: Record<string, string> = {
+      Accept: "application/json",
+      ...(fetchOptions.headers as Record<string, string>),
+    };
+
+    if (auth) {
+      const token = getToken();
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    if (
+      fetchOptions.body &&
+      !(fetchOptions.body instanceof FormData) &&
+      !headers["Content-Type"]
+    ) {
+      headers["Content-Type"] = "application/json";
+    }
+
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      ...fetchOptions,
+      headers,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new APIError(data?.message || "API error", res.status, data);
+    }
+
+    return data as T;
   };
 
-  if (auth) {
-    const token = getToken();
-    if (token) headers["Authorization"] = `Bearer ${token}`;
+  if (isGet) {
+    const promise = performRequest().catch(err => {
+      requestCache.delete(cacheKey);
+      throw err;
+    });
+    requestCache.set(cacheKey, { promise, time: Date.now() });
+    return promise as Promise<T>;
   }
 
-  // Only set Content-Type for JSON bodies (not FormData)
-  if (
-    fetchOptions.body &&
-    !(fetchOptions.body instanceof FormData) &&
-    !headers["Content-Type"]
-  ) {
-    headers["Content-Type"] = "application/json";
-  }
-
-  const res = await fetch(`${API_BASE}${endpoint}`, {
-    ...fetchOptions,
-    headers,
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new APIError(data?.message || "API error", res.status, data);
-  }
-
-  return data as T;
+  return performRequest() as Promise<T>;
 }
 
 export class APIError extends Error {
@@ -197,7 +225,7 @@ export const productsAPI = {
     );
   },
 
-  // GET /product-search?search=<keyword>&results_per_page=20&page=1
+  // Smart routing: uses /product-search for text queries, /product-list-filter for category/browse
   search: (params?: ProductSearchParams) => {
     const cleaned: Record<string, string> = {
       page: "1",
@@ -208,14 +236,18 @@ export const productsAPI = {
         if (v !== undefined && v !== "") cleaned[k] = String(v);
       }
     }
-    
-    // Backend REQUIRES search field - use a blank space to inclusively match all products unconditionally
-    if (!cleaned.search) {
-      cleaned.search = " ";
+
+    // If user typed a search query, use /product-search (which supports text matching)
+    if (cleaned.search && cleaned.search.trim()) {
+      const qs = "?" + new URLSearchParams(cleaned).toString();
+      return apiFetch<ProductListResponse>(`/product-search${qs}`);
     }
 
+    // Otherwise use /product-list-filter which correctly supports category_id filtering
+    // and returns all products (including newest) when no filters are set
+    delete cleaned.search; // not needed for this endpoint
     const qs = "?" + new URLSearchParams(cleaned).toString();
-    return apiFetch<ProductListResponse>(`/product-search${qs}`);
+    return apiFetch<ProductListResponse>(`/product-list-filter${qs}`);
   },
 
   detail: (product_id: number | string) =>
@@ -700,10 +732,17 @@ export interface ProductSearchParams {
   search?: string;         // main search keyword (API uses `search`, not `keyword`)
   category_id?: string;
   size?: string;
-  min_price?: string;
-  max_price?: string;
+  price_min?: string;
+  price_max?: string;
+  location?: string;
+  season?: string;
+  designer?: string;
+  body_type?: string;
+  height?: string;
+  sort?: string;
   page?: string;
   results_per_page?: string;
+  [key: string]: any;
 }
 
 export interface Category {

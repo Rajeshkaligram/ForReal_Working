@@ -69,6 +69,7 @@ export default function ImageGallery({ images, isRented, wishlisted, onWishlistT
         width={800}
         height={1000}
         key={currentImage} // forces refresh animation if desired
+        priority={true}
         className="object-cover object-top w-full aspect-[3/4]"
         onError={(e) => { (e.currentTarget as HTMLImageElement).src = "/assets/images/p1.jpeg"; }}
       />

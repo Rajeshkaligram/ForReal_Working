@@ -223,7 +223,7 @@ export default function ProductPage() {
   // ─── LOADING SKELETON ───
   if (loading) {
     return (
-      <section className="py-12 md:py-16 min-h-screen bg-white">
+      <section className="py-12 md:py-16 min-h-screen" style={{ backgroundColor: 'rgb(248 246 243)' }}>
         <div className="container max-w-7xl mx-auto px-4 md:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
             <div className="space-y-4">
@@ -261,7 +261,7 @@ export default function ProductPage() {
   if (product.color) mappedTags.push(product.color.toUpperCase());
 
   return (
-    <div className="bg-white text-primary pb-16 pt-24 lg:pt-15">
+    <div className="text-primary pb-16 pt-24 lg:pt-15" style={{ backgroundColor: 'rgb(248 246 243)' }}>
       <div className="container max-w-7xl mx-auto px-4 md:px-8 lg:px-12 pt-8 lg:pt-12">
         <button onClick={() => window.history.back()} className="flex items-center text-xs tracking-[0.2em] text-muted uppercase hover:text-black transition-colors mb-6 pb-2">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><path d="m15 18-6-6 6-6" /></svg>
