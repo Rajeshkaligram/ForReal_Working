@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DayPicker, DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface CalendarBoxProps {
   unavailableFrom?: string;
@@ -25,22 +26,47 @@ export default function CalendarBox({ unavailableFrom, unavailableTo, dateRange,
   // Also disable past dates
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  disabledDays.push({ before: today });
+  disabledDays.push((date: Date) => date < today);
+
+  // Manually control the active month to sidestep DayPicker bugs
+  const [currentMonth, setCurrentMonth] = useState<Date>(new Date(today.getFullYear(), today.getMonth(), 1));
+
+  const handlePrev = () => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+  const handleNext = () => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1));
 
   return (
     <div className="border border-gray-200 p-6 bg-[#FAF9F8] mt-8 hidden md:block overflow-hidden">
       <p className="text-[10px] tracking-[0.3em] text-muted mb-4 uppercase">Availability</p>
-      <div className="flex justify-center w-full overflow-x-auto pb-4">
+      <div className="flex justify-center w-full overflow-x-auto pb-4 relative custom-calendar-wrapper">
+        
+        {/* Custom Navigation Override */}
+        <div className="absolute top-[50px] w-full flex justify-between z-10 pointer-events-none">
+          <button 
+            type="button" 
+            onClick={handlePrev} 
+            className="w-8 h-8 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 pointer-events-auto transition-colors text-black"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button 
+            type="button" 
+            onClick={handleNext} 
+            className="w-8 h-8 flex items-center justify-center border border-gray-200 bg-white hover:bg-gray-50 pointer-events-auto transition-colors text-black"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+
         <DayPicker
           mode="range"
           selected={dateRange}
           onSelect={setDateRange}
+          month={currentMonth}
+          onMonthChange={setCurrentMonth}
           numberOfMonths={2}
-          pagedNavigation
           showOutsideDays
           disabled={disabledDays}
-          fromYear={today.getFullYear()}
-          className="custom-calendar flex justify-center w-full"
+          className="custom-calendar flex justify-center w-full [&_.rdp-nav]:hidden calendar-split-nav"
         />
       </div>
       <p className="text-xs text-muted mt-4 text-center">

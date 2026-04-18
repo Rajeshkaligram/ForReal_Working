@@ -67,7 +67,7 @@ export default function DiscoverPage() {
     try {
       const clean: Record<string, string> = {
         page: params.page || "1",
-        results_per_page: "15",
+        results_per_page: "20",
       };
       for (const [k, v] of Object.entries(params)) {
         if (v && k !== "page") clean[k] = v;
@@ -544,7 +544,7 @@ export default function DiscoverPage() {
 
         {/* ── PRODUCT GRID ── */}
         {loading ? (
-          <div className={`grid gap-4 md:gap-5 ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3" : "grid-cols-1"}`}>
+          <div className={`grid gap-4 md:gap-5 ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : "grid-cols-1"}`}>
             {Array.from({ length: 6 }).map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="bg-gray-100 aspect-[3/4] w-full rounded-sm" />
@@ -565,7 +565,7 @@ export default function DiscoverPage() {
           </div>
         ) : viewMode === "grid" ? (
           /* ── Grid View ── */
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
             {products.map((item, i) => (
               <Link
                 key={item.id}

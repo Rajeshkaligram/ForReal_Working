@@ -35,7 +35,7 @@ function MessageContent() {
   const [receiverId, setReceiverId] = useState(initialUserId || "");
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState("");
-  
+
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Initial load: Fetch Inbox list
@@ -58,21 +58,27 @@ function MessageContent() {
   const fetchInbox = async () => {
     try {
       const res = await messagesAPI.list();
-      const allMsgs = res?.data || [];
+      // API returns { status, message, data: { messages: [...] } }
+      const rawData = res?.data as any;
+      const allMsgs: Message[] = Array.isArray(rawData)
+        ? rawData
+        : Array.isArray(rawData?.messages)
+          ? rawData.messages
+          : [];
       setInboxMessages(allMsgs);
-      
+
       // If we have an active room perfectly matching, let's refresh the active chat too
       if (activeRoomId) {
-         fetchActiveChat(activeRoomId);
+        fetchActiveChat(activeRoomId);
       } else if (initialUserId) {
-         // Auto-find room if one exists for the requested user
-         const existingThread = allMsgs.find(m => 
-           String(m.sender_id) === initialUserId || String(m.receiver_id) === initialUserId
-         );
-         if (existingThread && existingThread.room_id) {
-           setActiveRoomId(existingThread.room_id);
-           fetchActiveChat(existingThread.room_id);
-         }
+        // Auto-find room if one exists for the requested user
+        const existingThread = allMsgs.find(m =>
+          String(m.sender_id) === initialUserId || String(m.receiver_id) === initialUserId
+        );
+        if (existingThread && existingThread.room_id) {
+          setActiveRoomId(existingThread.room_id);
+          fetchActiveChat(existingThread.room_id);
+        }
       }
     } catch {
       setInboxMessages([]);
@@ -128,13 +134,13 @@ function MessageContent() {
       const errMsg = err instanceof Error ? err.message.toUpperCase() : "Failed to send.";
       // Temporarily mock functionality if endpoint is missing (404/Not Available)
       if (errMsg.includes("RESOURCE NOT") || errMsg.includes("404")) {
-         setActiveChatMessages((prev) => [...prev, mockMessage]);
-         setNewMessage("");
-         setTimeout(() => {
-           bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-         }, 100);
+        setActiveChatMessages((prev) => [...prev, mockMessage]);
+        setNewMessage("");
+        setTimeout(() => {
+          bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+        }, 100);
       } else {
-         setSendError(err instanceof Error ? err.message : "Failed to send.");
+        setSendError(err instanceof Error ? err.message : "Failed to send.");
       }
     } finally {
       setSending(false);
@@ -187,13 +193,13 @@ function MessageContent() {
 
         {/* 2-Panel Layout Container */}
         <div className="bg-white border border-border flex flex-col md:flex-row shadow-sm" style={{ height: "70vh", minHeight: "500px" }}>
-          
+
           {/* LEFT PANEL: Conversation List */}
           <div className={`md:w-1/3 border-r border-border flex flex-col ${activeRoomId || initialUserId ? 'hidden md:flex' : 'flex'}`}>
             <div className="p-4 border-b border-border bg-gray-50 flex items-center justify-between">
               <span className="text-sm font-medium uppercase tracking-widest text-muted">Recent Chats</span>
               <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center">
-                 <span className="text-xs text-primary font-bold">{rooms.length}</span>
+                <span className="text-xs text-primary font-bold">{rooms.length}</span>
               </div>
             </div>
             <div className="flex-1 overflow-y-auto">
@@ -201,25 +207,27 @@ function MessageContent() {
                 <div className="flex justify-center py-10"><Loader2 className="animate-spin text-muted" size={24} /></div>
               ) : rooms.length === 0 ? (
                 <div className="text-center py-10 px-4">
-                   <p className="text-xs text-muted">No conversations yet.</p>
+                  <p className="text-xs text-muted">No conversations yet.</p>
                 </div>
               ) : (
                 rooms.map(room => {
                   const counterpartId = room.sender_id === authUser?.id ? room.receiver_id : room.sender_id;
-                  const counterpartName = room.sender_id === authUser?.id ? `Counterpart #${room.receiver_id}` : (room.sender?.first_name || `User #${room.sender_id}`);
+                  const counterpartName = room.sender_id === authUser?.id
+                    ? (room.first_name || `User #${room.receiver_id}`)
+                    : (room.sender?.first_name || room.first_name || `User #${room.sender_id}`);
                   const isActive = activeRoomId === room.room_id;
 
                   return (
-                    <div 
-                      key={room.room_id} 
+                    <div
+                      key={room.room_id}
                       onClick={() => openConversation(room.room_id as string | number, counterpartId)}
                       className={`p-4 border-b border-border cursor-pointer transition-colors ${isActive ? 'bg-primary/5 border-l-2 border-l-primary' : 'hover:bg-gray-50 border-l-2 border-l-transparent'}`}
                     >
                       <div className="flex justify-between items-start mb-1">
                         <p className="text-sm font-medium truncate">{counterpartName}</p>
-                        <p className="text-[10px] text-muted whitespace-nowrap">{formatTime(room.created_at)}</p>
+                        <p className="text-[10px] text-muted whitespace-nowrap">{room.sent || formatTime(room.created_at)}</p>
                       </div>
-                      <p className="text-xs text-muted truncate">{room.message}</p>
+                      <p className="text-xs text-muted truncate">{room.content || room.message}</p>
                     </div>
                   )
                 })
@@ -229,17 +237,17 @@ function MessageContent() {
 
           {/* RIGHT PANEL: Chat Thread */}
           <div className={`flex-1 flex flex-col ${!activeRoomId && !initialUserId ? 'hidden md:flex' : 'flex'}`}>
-            
+
             {/* Header */}
             {(!activeRoomId && !initialUserId) ? (
-               <div className="flex-1 flex flex-col items-center justify-center bg-gray-50/50">
-                  <MessageCircle size={48} className="text-muted opacity-20 mb-4" />
-                  <p className="text-sm text-muted">Select a conversation to start messaging</p>
-               </div>
+              <div className="flex-1 flex flex-col items-center justify-center bg-gray-50/50">
+                <MessageCircle size={48} className="text-muted opacity-20 mb-4" />
+                <p className="text-sm text-muted">Select a conversation to start messaging</p>
+              </div>
             ) : (
               <>
                 <div className="p-4 border-b border-border bg-gray-50 flex items-center gap-3">
-                  <button onClick={() => { setActiveRoomId(null); if(initialUserId) setReceiverId(""); }} className="md:hidden text-muted p-1">
+                  <button onClick={() => { setActiveRoomId(null); if (initialUserId) setReceiverId(""); }} className="md:hidden text-muted p-1">
                     <ArrowLeft size={18} />
                   </button>
                   <div className="w-8 h-8 rounded-full bg-border flex items-center justify-center">
@@ -265,13 +273,12 @@ function MessageContent() {
                       return (
                         <div key={msg.id} className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
                           <div
-                            className={`max-w-[80%] md:max-w-[65%] px-4 py-3 text-sm leading-relaxed ${
-                              isOwn
+                            className={`max-w-[80%] md:max-w-[65%] px-4 py-3 text-sm leading-relaxed ${isOwn
                                 ? "bg-black text-white"
                                 : "bg-white border border-border text-black shadow-sm"
-                            }`}
+                              }`}
                           >
-                            <p>{msg.message}</p>
+                            <p>{msg.content || msg.message}</p>
                             {msg.created_at && (
                               <p className={`text-[9px] mt-1.5 font-medium tracking-widest ${isOwn ? "text-white/50" : "text-muted"}`}>
                                 {formatTime(msg.created_at)}
@@ -307,7 +314,7 @@ function MessageContent() {
                 </div>
               </>
             )}
-            
+
           </div>
         </div>
       </div>

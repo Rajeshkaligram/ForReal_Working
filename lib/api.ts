@@ -19,6 +19,20 @@ type FetchOptions = RequestInit & {
 
 const requestCache = new Map<string, { promise: Promise<any>; time: number }>();
 
+// Endpoints that should never be cached (always fetch fresh)
+const NO_CACHE_PATTERNS = ["/messages", "/room-messages", "/send-message"];
+
+// Helper to clear specific cache entries (call after mutations)
+export function clearAPICache(pattern?: string) {
+  if (pattern) {
+    for (const key of requestCache.keys()) {
+      if (key.includes(pattern)) requestCache.delete(key);
+    }
+  } else {
+    requestCache.clear();
+  }
+}
+
 export async function apiFetch<T = unknown>(
   endpoint: string,
   options: FetchOptions = {}
@@ -27,8 +41,9 @@ export async function apiFetch<T = unknown>(
   const isGet = !fetchOptions.method || fetchOptions.method.toUpperCase() === "GET";
   
   const cacheKey = auth ? `auth_${endpoint}` : endpoint;
+  const shouldSkipCache = NO_CACHE_PATTERNS.some(p => endpoint.includes(p));
 
-  if (isGet) {
+  if (isGet && !shouldSkipCache) {
     const cached = requestCache.get(cacheKey);
     // Return cached promise if within 60 seconds
     if (cached && Date.now() - cached.time < 60000) {
@@ -72,7 +87,7 @@ export async function apiFetch<T = unknown>(
     return data as T;
   };
 
-  if (isGet) {
+  if (isGet && !shouldSkipCache) {
     const promise = performRequest().catch(err => {
       requestCache.delete(cacheKey);
       throw err;
@@ -854,6 +869,10 @@ export interface Message {
   sender_id: number;
   receiver_id: number;
   message: string;
+  content?: string; // Some responses use 'content' instead of 'message'
+  sent?: string; // Relative time string e.g. "1 year ago"
+  first_name?: string;
+  last_name?: string;
   created_at: string;
   sender?: User;
 }
