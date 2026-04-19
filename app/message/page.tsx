@@ -21,6 +21,16 @@ function MessageContent() {
   const searchParams = useSearchParams();
   const initialUserId = searchParams.get("user_id");
 
+  const getSenderId = (m: Message) => (m.sender_id ?? m.from_user_id ?? 0);
+  const getReceiverId = (m: Message) => (m.receiver_id ?? m.to_user_id ?? 0);
+  const getRoomId = (m: Message) => m.room_id;
+  const getText = (m: Message) => m.content || m.message || "";
+  const getSortTime = (m: Message) => {
+    const raw = m.created_at || m.updated_at;
+    const t = raw ? new Date(String(raw)).getTime() : NaN;
+    return Number.isFinite(t) ? t : 0;
+  };
+
   // Inbox state (list of all messages used to deduce rooms)
   const [inboxMessages, setInboxMessages] = useState<Message[]>([]);
   const [loadingInbox, setLoadingInbox] = useState(true);
@@ -59,12 +69,7 @@ function MessageContent() {
     try {
       const res = await messagesAPI.list();
       // API returns { status, message, data: { messages: [...] } }
-      const rawData = res?.data as any;
-      const allMsgs: Message[] = Array.isArray(rawData)
-        ? rawData
-        : Array.isArray(rawData?.messages)
-          ? rawData.messages
-          : [];
+      const allMsgs: Message[] = Array.isArray(res?.data?.messages) ? res.data.messages : [];
       setInboxMessages(allMsgs);
 
       // If we have an active room perfectly matching, let's refresh the active chat too
@@ -72,12 +77,13 @@ function MessageContent() {
         fetchActiveChat(activeRoomId);
       } else if (initialUserId) {
         // Auto-find room if one exists for the requested user
-        const existingThread = allMsgs.find(m =>
-          String(m.sender_id) === initialUserId || String(m.receiver_id) === initialUserId
+        const existingThread = allMsgs.find((m) =>
+          String(getSenderId(m)) === initialUserId || String(getReceiverId(m)) === initialUserId
         );
-        if (existingThread && existingThread.room_id) {
-          setActiveRoomId(existingThread.room_id);
-          fetchActiveChat(existingThread.room_id);
+        const rid = existingThread ? getRoomId(existingThread) : null;
+        if (rid !== undefined && rid !== null) {
+          setActiveRoomId(rid);
+          fetchActiveChat(rid);
         }
       }
     } catch {
@@ -91,7 +97,8 @@ function MessageContent() {
     setLoadingChat(true);
     try {
       const res = await messagesAPI.roomMessages(roomId);
-      setActiveChatMessages(res?.data || []);
+      const msgs: Message[] = Array.isArray(res?.data?.messages) ? res.data.messages : [];
+      setActiveChatMessages(msgs);
     } catch (err) {
       // In case api fails or format differs, let's just extract from inboxMessages as fallback
       const fallbackMsgs = inboxMessages.filter(m => String(m.room_id) === String(roomId));
@@ -118,7 +125,7 @@ function MessageContent() {
       id: Date.now(),
       sender_id: authUser?.id || 0,
       receiver_id: Number(receiverId),
-      message: newMessage.trim(),
+      content: newMessage.trim(),
       created_at: new Date().toISOString(),
       room_id: activeRoomId || undefined,
     };
@@ -151,8 +158,9 @@ function MessageContent() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeChatMessages]);
 
-  const formatTime = (dateStr: string) => {
+  const formatTime = (dateStr?: string) => {
     try {
+      if (!dateStr) return "";
       return new Date(dateStr).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     } catch {
       return "";
@@ -165,11 +173,12 @@ function MessageContent() {
     // Assume backend returns messages chronologically. The last one processes will be the most recent.
     inboxMessages.forEach((msg) => {
       // We overwrite past msgs for the same room to just keep track of the latest one
-      if (msg.room_id !== undefined) {
-        map.set(msg.room_id, msg);
+      const rid = getRoomId(msg);
+      if (rid !== undefined && rid !== null) {
+        map.set(rid, msg);
       }
     });
-    return Array.from(map.values()).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    return Array.from(map.values()).sort((a, b) => getSortTime(b) - getSortTime(a));
   }, [inboxMessages]);
 
 
@@ -211,23 +220,28 @@ function MessageContent() {
                 </div>
               ) : (
                 rooms.map(room => {
-                  const counterpartId = room.sender_id === authUser?.id ? room.receiver_id : room.sender_id;
-                  const counterpartName = room.sender_id === authUser?.id
+                  const senderId = getSenderId(room);
+                  const receiverIdNum = getReceiverId(room);
+                  const counterpartId = senderId === authUser?.id ? receiverIdNum : senderId;
+                  const counterpartName = senderId === authUser?.id
                     ? (room.first_name || `User #${room.receiver_id}`)
                     : (room.sender?.first_name || room.first_name || `User #${room.sender_id}`);
                   const isActive = activeRoomId === room.room_id;
+                  const roomId = getRoomId(room);
+
+                  if (roomId === undefined || roomId === null) return null;
 
                   return (
                     <div
                       key={room.room_id}
-                      onClick={() => openConversation(room.room_id as string | number, counterpartId)}
+                      onClick={() => openConversation(roomId, counterpartId)}
                       className={`p-4 border-b border-border cursor-pointer transition-colors ${isActive ? 'bg-primary/5 border-l-2 border-l-primary' : 'hover:bg-gray-50 border-l-2 border-l-transparent'}`}
                     >
                       <div className="flex justify-between items-start mb-1">
                         <p className="text-sm font-medium truncate">{counterpartName}</p>
-                        <p className="text-[10px] text-muted whitespace-nowrap">{room.sent || formatTime(room.created_at)}</p>
+                        <p className="text-[10px] text-muted whitespace-nowrap">{room.sent || (room.created_at ? formatTime(room.created_at) : "")}</p>
                       </div>
-                      <p className="text-xs text-muted truncate">{room.content || room.message}</p>
+                      <p className="text-xs text-muted truncate">{getText(room)}</p>
                     </div>
                   )
                 })
@@ -269,7 +283,7 @@ function MessageContent() {
                     </div>
                   ) : (
                     activeChatMessages.map((msg) => {
-                      const isOwn = msg.sender_id === authUser?.id;
+                      const isOwn = getSenderId(msg) === authUser?.id;
                       return (
                         <div key={msg.id} className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
                           <div
@@ -278,7 +292,7 @@ function MessageContent() {
                                 : "bg-white border border-border text-black shadow-sm"
                               }`}
                           >
-                            <p>{msg.content || msg.message}</p>
+                            <p>{getText(msg)}</p>
                             {msg.created_at && (
                               <p className={`text-[9px] mt-1.5 font-medium tracking-widest ${isOwn ? "text-white/50" : "text-muted"}`}>
                                 {formatTime(msg.created_at)}

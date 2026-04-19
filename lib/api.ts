@@ -486,12 +486,12 @@ export const messagesAPI = {
   list: () => apiFetch<MessagesResponse>("/messages", { auth: true }),
 
   roomMessages: (room_id: number | string) =>
-    apiFetch<{ status: number; data: Message[] }>(`/room-messages?room_id=${room_id}`, {
+    apiFetch<MessagesResponse>(`/room-messages?room_id=${room_id}`, {
       auth: true,
     }),
 
   send: (body: { receiver_id: string; message: string }) =>
-    apiFetch<{ message: string }>("/send-message", {
+    apiFetch<SendMessageResponse>("/send-message", {
       method: "POST",
       body: buildFormData(body),
       auth: true,
@@ -866,20 +866,34 @@ export interface RentedProductsResponse {
 export interface Message {
   id: number;
   room_id?: string | number;
-  sender_id: number;
-  receiver_id: number;
-  message: string;
+  sender_id?: number;
+  receiver_id?: number;
+  from_user_id?: number;
+  to_user_id?: number;
+  message?: string;
   content?: string; // Some responses use 'content' instead of 'message'
   sent?: string; // Relative time string e.g. "1 year ago"
   first_name?: string;
   last_name?: string;
-  created_at: string;
+  profile_picture?: string;
+  profile_picture_custom_size?: string;
+  created_at?: string;
+  updated_at?: string;
   sender?: User;
 }
 
 export interface MessagesResponse {
   status: number;
-  data: Message[];
+  message?: string;
+  data: {
+    messages: Message[];
+  };
+}
+
+export interface SendMessageResponse {
+  status: number;
+  message?: string;
+  data: Message & { status?: number };
 }
 
 export interface Review {
