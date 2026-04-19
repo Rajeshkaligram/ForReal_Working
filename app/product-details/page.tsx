@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { DateRange } from "react-day-picker";
@@ -22,7 +22,17 @@ import Category from "@/components/product-details/Category";
 import ProductInfo from "@/components/product-details/ProductInfo";
 import RelatedProducts from "@/components/product-details/RelatedProducts";
 
+import { Loader2 } from "lucide-react";
+
 export default function ProductPage() {
+  return (
+    <Suspense fallback={<div className="h-screen flex items-center justify-center"><Loader2 className="animate-spin text-primary" size={32} /></div>}>
+      <ProductContent />
+    </Suspense>
+  );
+}
+
+function ProductContent() {
   const params = useSearchParams();
   const productId = params.get("id");
 
