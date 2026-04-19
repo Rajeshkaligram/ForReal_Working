@@ -18,7 +18,7 @@ export default function ReadySection() {
 
           {/* OUTLINE Link */}
           <Link
-            href=""
+            href="/listing"
             className="btn-transparent text-black! border-border! border hover:bg-muted/20!"
           >
             List your wardrobe
